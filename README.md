@@ -1,6 +1,6 @@
 # **Proportional Streamflow Disaggregation Using Precipitation and Land Cover in disjoint hydrologic and hydraulic networks**
 
-For testing disaggregation methods, the following data sets and transformations were used.
+Our goal with this work is to develop a statistical downscaling method that can take predicted or observered streamflow and disaggregate it into its contributing components. Our method seeks to (1) Captures Real-Time Storm Dynamics, (2) model true river drainage and proportional flow distribution while (3) ensuring continuous downstream flow accumulation. For testing disaggregation methods, the following data sets and transformations were used.
 
 ## **Data:** 
 
@@ -20,7 +20,7 @@ Daily streamflow data from ['2023-01-01'] to ['2023-12-31'] from the USGS were u
 
 |  |  |  |  |  |
 |---------------|---------------|---------------|---------------|---------------|
-| **Description** | **Anderson Level 1** | **Anderson Level 2** | **Level 1** **Runoff Coefficient** | **Level 2Runoff Coefficient** |
+| **Description** | **Anderson Level 1** | **Anderson Level 2** | **Level 1 Runoff Coefficient** | **Level 2 Runoff Coefficient** |
 | Open Water  | 1 | 11 | 0.95 | 0.95 |
 | Perennial Ice/Snow | 1 | 12 | 0.95 | 0.9 |
 | Developed Open Space | 2 | 21 | 0.875 | 0.2 |
@@ -185,26 +185,30 @@ Unnormalized_{W_{i,s}} = \frac{A_i * Y_i * P_{effective_{(i,d)}}}{K_i}
 $$
 
 $$
-P_{effective_{(i,d)}} = \\
+P_{effective_{(i,d)}} =
+$$
 
-P_{(i,d)} if P_{(i,d)} > 0 \\
+$$
+P_{(i,d)} if P_{(i,d)} > 0
+$$
 
+$$
 PRECIP_FLOOR if P_{(i,d)} = 0
 $$
 
 ## **Results:**
 
-We found that cumulative area approaches better represent discharge disaggregation compared to the incremental area methods. We also used the two stations located inside the study basin to assess the performance of our top candidate approaches namely:
+We found that cumulative area approaches better represent discharge disaggregation compared to the incremental area methods. We also found - in this basin - there was no advantage to using Level 2 land cover coefficents. Based on this, we reduced the 13 tested models to 5 key options increasing in complextity and data requirements. 
 
-1- Cumulative area & Level 1 Landcover
+1- Cumulative area & Landcover
 
-2- Cumulative area & Level 1 Landcover & annual precipitation & travel time
+2- Model 1 + annual precipitation + travel time
 
-3- Cumulative area & Level 1 Landcover &  annual precipitation & travel time & hydraulic conductivity
+3- Model 2 + hydraulic conductivity
 
-4- Cumulative area & Level 1 Landcover &  real time precipitation & travel time & hydraulic conductivity
+4- Model 3 replaceing annual precipitation with real time precipitation
 
-5- Weight adjustment on 4th item
+5- Weight adjusted Model 4
 
 **Note**: The travel time methods rely on accurate estimates of manning roughness, channel dimensions, and slope values. Here we assumed the following constants for all reaches:
 
@@ -264,14 +268,13 @@ With the caveats that:
 3. Best guesses for Landcover coefficients were used, with no optimization
 4. We intentionally went with basic channels opposed to those accessible from [riverML](https://lynker-spatial.github.io/mip-riverml/)
 5. We intentionally went with a statistics based approach opposed to trying to train and ML model or something more complex.
+6. This is a single test site!
 
 There is a lot of optimism to be had about this approach.
 
-We found using a cumulative area, precipitation, runoff coefficient, and hydraulic conductivity with travel time can potentially achieve the best results. This method account for:
-Captures Real-Time Storm Dynamics: By using daily precipitation, the model is event-driven, not based on static averages. Unlike area-only methods, it correctly concentrates the disaggregated flow in the specific sub-basins that actually received rain, providing a physically realistic response to weather events.
-Models True River Drainage: It calculates the water travel time from every upstream segment to the watershed outlet. This allows it to correctly lag the discharge, ensuring that runoff generated on a specific day is accurately matched to its later arrival and measurement at the outlet, which is crucial for modeling flood timing.
-Provides a Proportional Flow Distribution: The model is robust and adapts to changing conditions. On storm days, flow is proportionally assigned based on rainfall intensity. During dry periods, it seamlessly transitions to distributing baseflow based on physical properties like area and soil type.
-Ensures Continuous Downstream Flow Aggregation: By using the cumulative drainage area (the total area upstream of a divide) in its weighting formula, the model guarantees that calculated discharge realistically increases as you move downstream. 
+We found model 2 and 3 (adding static conductivity) strike a nice balance between complexity and performance, while model 4 (adding real-time precipitation) provides a more dynamic response to storm events. Model 5, which adjusts weights based on real-time precipitation, further enhances the model's ability to adapt to changing conditions.
+
+Future work should look at 3 things: (1) extensability to other basins and (2) optimization of the parameters to improve performance (3) [decomposition of error into correlation and bias](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2023JD038534) to evaluate post processing methods for further refinement (hybrid model)
 
 
 

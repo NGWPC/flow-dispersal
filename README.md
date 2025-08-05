@@ -72,7 +72,7 @@ Where:
 
 -   $A_i$: Area of incremental areaa i
 
--   $C_i$: Runoff yield modifier, based on land cover in i where
+-   $Y_i$: Runoff yield modifier, based on land cover in i where
 
 $$
 Y_i = \sum_{l=1}^{L} f_{i,l} * y_l
@@ -87,7 +87,7 @@ and
 #### **3. Area + Landcover based runoff coefficient + average rainfall**
 
 $$
-Qi(t) = Q_{nexus(t)} * \frac{A_i * Y_i * P_i}{max(A * Y * C)_j}
+Qi(t) = Q_{nexus(t)} * \frac{A_i * Y_i * P_i}{max(A * Y * P)_j}
 $$
 
 Where:
@@ -103,7 +103,7 @@ Where:
 #### **4. Area + Landcover based runoff coefficient + average rainfall + hydraulic conductivity**
 
 $$
-Qi(t) = Q_{nexus(t)} * \frac{A_i * \frac{1}{K_i} * P_i * Y_i}{max(A * \frac{1}{K} * Y)_j}
+Qi(t) = Q_{nexus(t)} * \frac{A_i * \frac{1}{K_i} * P_i * Y_i}{max(A * \frac{1}{K} * Y * P)_j}
 $$
 
 Where:

@@ -541,7 +541,7 @@ from incremental area i at time</p></li>
 forecasted flow</p></li>
 <li><p><span class="math inline">\(A_i\)</span>: Area of incremental
 areaa i</p></li>
-<li><p><span class="math inline">\(C_i\)</span>: Runoff yield modifier,
+<li><p><span class="math inline">\(Y_i\)</span>: Runoff yield modifier,
 based on land cover in i where</p></li>
 </ul>
 <p><span class="math display">\[
@@ -560,7 +560,7 @@ scale)</p></li>
 <h4><strong>3. Area + Landcover based runoff coefficient + average
 rainfall</strong></h4>
 <p><span class="math display">\[
-Qi(t) = Q_{nexus(t)} * \frac{A_i * Y_i * P_i}{max(A * Y * C)_j}
+Qi(t) = Q_{nexus(t)} * \frac{A_i * Y_i * P_i}{max(A * Y * P)_j}
 \]</span></p>
 <p>Where:</p>
 <ul>
@@ -579,7 +579,7 @@ runoff coefficient</strong> for catchment i</p></li>
 rainfall + hydraulic conductivity</strong></h4>
 <p><span class="math display">\[
 Qi(t) = Q_{nexus(t)} * \frac{A_i * \frac{1}{K_i} * P_i * Y_i}{max(A *
-\frac{1}{K} * Y)_j}
+\frac{1}{K} * Y * P)_j}
 \]</span></p>
 <p>Where:</p>
 <ul>

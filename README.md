@@ -10,6 +10,8 @@ A hydrofabric (flowines, divides, flowpaths) was subset from the experimental v3
 
 ![](https://lh7-rt.googleusercontent.com/docsz/AD_4nXeK23UBp1RGs1vxwXNtmvXDujh_iEj0nLlYspjEdAC9HH2IPTQG0x0qq4XRFfLueN0lHd72VF8C8HqK4dWtx9iOtgQGSSnRYVOfh0_gIkcMdRw29GRwaUnm_7vQPCsMY_fKjDjaP93PGCur2AU867k?key=XBKcXvbG-URTFFoiG1slFA)
 
+Source: [Lynker Spatial](https://www.lynker-spatial.com/)
+
 ### 2.  **Streamflow**
 
 Daily streamflow data from ['2023-01-01'] to ['2023-12-31'] from the USGS were used for testing.
@@ -36,13 +38,19 @@ Daily streamflow data from ['2023-01-01'] to ['2023-12-31'] from the USGS were u
 | Woody Wetlands | 9 | 90 | 0.125 | 0.15 |
 | Herbaceous Wetlands | 9 | 95 | 0.125 | 0.1 |
 
+Source: [2019 NLCD](https://www.mrlc.gov)
+
 ### 4.  **Precipitation data:** 
 
-Average daily surface precipitation data (from Daymet 2023) was summarized to the incremental area of the hydrofabric.
+Average daily surface precipitation data (from Dayme v4 for 2023) was summarized to the incremental area of the hydrofabric.
+
+Source: [Daymet v4](https://daymet.ornl.gov/)
 
 ### 5. **Soil Data:** 
 
 30m POLARIS data was used to summarize average saturated hydraulic conductivity per incremental area in the hydrofabric.
+
+Source: [POLARIS](http://hydrology.cee.duke.edu/POLARIS/)
 
 ## **Methods**
 
@@ -178,23 +186,93 @@ $$
 
 $$
 P_{effective_{(i,d)}} = \\
+
 P_{(i,d)} if P_{(i,d)} > 0 \\
+
 PRECIP_FLOOR if P_{(i,d)} = 0
 $$
 
 ## **Results:**
 
-Of the Incremental area approaches the best performing was…
+We found that cumulative area approaches better represent discharge disaggregation compared to the incremental area methods. We also used the two stations located inside the study basin to assess the performance of our top candidate approaches namely:
 
-\
-\
+1- Cumulative area & Level 1 Landcover
 
-This method provided the most accurate estimate across all, by accounting for:
+2- Cumulative area & Level 1 Landcover & annual precipitation & travel time
 
-1.  Captures Real-Time Storm Dynamics: By using daily precipitation, the model is event-driven, not based on static averages. Unlike area-only methods, it correctly concentrates the disaggregated flow in the specific sub-basins that actually received rain, providing a physically realistic response to weather events.
+3- Cumulative area & Level 1 Landcover &  annual precipitation & travel time & hydraulic conductivity
 
-2.  Models True River Drainage: It calculates the water travel time from every upstream segment to the watershed outlet. This allows it to correctly lag the discharge, ensuring that runoff generated on a specific day is accurately matched to its later arrival and measurement at the outlet, which is crucial for modeling flood timing.
+4- Cumulative area & Level 1 Landcover &  real time precipitation & travel time & hydraulic conductivity
 
-3.  Provides a Proportional Flow Distribution: The model is robust and adapts to changing conditions. On storm days, flow is proportionally assigned based on rainfall intensity. During dry periods, it seamlessly transitions to distributing baseflow based on physical properties like area and soil type.
+5- Weight adjustment on 4th item
 
-4.  Ensures Continuous Downstream Flow Aggregation: By using the cumulative drainage area (the total area upstream of a divide) in its weighting formula, the model guarantees that calculated discharge realistically increases as you move downstream. 
+**Note**: The travel time methods rely on accurate estimates of manning roughness, channel dimensions, and slope values. Here we assumed the following constants for all reaches:
+
+  - n = 0.1
+  - Slope = 0.01
+  - Channel dimension = a rectangular channel TW=5 and Y=2
+
+Two forms of evaluation are used, visual animations of the basin, and a spot check at 2 upstream gage locations.The two stations evaluated are: '01179500', '01181000'
+
+# Animations over 2023
+
+## Model 1
+![](images/tt_A_RC_L1.gif)
+
+## Model 2
+![](images/tt_P_A_RC_L1_TT.gif)
+
+## Model 3
+![](images/tt_K_P_A_RC_L1_TT.gif)
+
+## Model 4
+![](images/real_time_K_P_A_RC_L1_TT.gif)
+
+## Model 5
+
+![](images/test_real_time_K_P_A_RC_L1_TT.gif)
+
+# Upstream Gage Comparison
+
+## Model 1
+![](images/A_RC_L1_01179500.png)
+![](images/A_RC_L1_01181000.png)
+
+## Model 2
+![](images/P_A_RC_L1_TT_01179500.png)
+![](images/P_A_RC_L1_TT_01181000.png)
+
+## Model 3
+![](images/K_P_A_RC_L1_TT_01179500.png)
+![](images/K_P_A_RC_L1_TT_01181000.png)
+
+## Model 4
+![](images/real_time_K_P_A_RC_L1_TT_01179500.png)
+![](images/real_time_K_P_A_RC_L1_TT_01181000.png)
+
+## Model 5
+
+![](images/test_real_time_K_P_A_RC_L1_TT_01179500.png)
+![](images/test_real_time_K_P_A_RC_L1_TT_01181000.png)
+
+# Conclusion
+
+With the caveats that:
+
+1. This is prototype hydrofabric that is still dealing with non-dendritic flowlines
+2. Only one year of rainfall data was used as a benchmark P
+3. Best guesses for Landcover coefficients were used, with no optimization
+4. We intentionally went with basic channels opposed to those accessible from [riverML](https://lynker-spatial.github.io/mip-riverml/)
+5. We intentionally went with a statistics based approach opposed to trying to train and ML model or something more complex.
+
+There is a lot of optimism to be had about this approach.
+
+We found using a cumulative area, precipitation, runoff coefficient, and hydraulic conductivity with travel time can potentially achieve the best results. This method account for:
+Captures Real-Time Storm Dynamics: By using daily precipitation, the model is event-driven, not based on static averages. Unlike area-only methods, it correctly concentrates the disaggregated flow in the specific sub-basins that actually received rain, providing a physically realistic response to weather events.
+Models True River Drainage: It calculates the water travel time from every upstream segment to the watershed outlet. This allows it to correctly lag the discharge, ensuring that runoff generated on a specific day is accurately matched to its later arrival and measurement at the outlet, which is crucial for modeling flood timing.
+Provides a Proportional Flow Distribution: The model is robust and adapts to changing conditions. On storm days, flow is proportionally assigned based on rainfall intensity. During dry periods, it seamlessly transitions to distributing baseflow based on physical properties like area and soil type.
+Ensures Continuous Downstream Flow Aggregation: By using the cumulative drainage area (the total area upstream of a divide) in its weighting formula, the model guarantees that calculated discharge realistically increases as you move downstream. 
+
+
+
+

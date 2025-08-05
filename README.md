@@ -78,7 +78,7 @@ Where:
 
 -   $Q_{nexus(t)}$: Observed or forecasted flow
 
--   $A_i$: Area of incremental areaa i
+-   $A_i$: Area of incremental area i
 
 -   $Y_i$: Runoff yield modifier, based on land cover in i where
 
@@ -92,7 +92,7 @@ and
 
 -   $y_l$​: Runoff yield factor for land cover l, derived from long-term studies (in mm/day or normalized scale)
 
-#### **3. Area + Landcover based runoff coefficient + average rainfall**
+### **3. Area + Landcover based runoff coefficient + average rainfall**
 
 $$
 Qi(t) = Q_{nexus(t)} * \frac{A_i * Y_i * P_i}{max(A * Y * P)_j}
@@ -108,7 +108,7 @@ Where:
 
 -   $Y_i$: **effective runoff coefficient** for catchment i
 
-#### **4. Area + Landcover based runoff coefficient + average rainfall + hydraulic conductivity**
+### **4. Area + Landcover based runoff coefficient + average rainfall + hydraulic conductivity**
 
 $$
 Qi(t) = Q_{nexus(t)} * \frac{A_i * \frac{1}{K_i} * P_i * Y_i}{max(A * \frac{1}{K} * Y * P)_j}
@@ -118,7 +118,7 @@ Where:
 
 -   $K_i$: Average hydraulic conductivity at catchment
 
-#### **5.  Area + Landcover based runoff coefficient + “realtime” rainfall + hydraulic conductivity**
+### **5.  Area + Landcover based runoff coefficient + “realtime” rainfall + hydraulic conductivity**
 
 Qi(t) = Qnexus(t) \* Aiɑ \* 1/Ki⍵\*Pi(t)Ɣ \* Ciβmax((Aɑ \* 1/K⍵\* P(t)Ɣ\*Cβ)j)
 
@@ -166,7 +166,7 @@ $s$ represents one of the four seasons (e.g., 'Summer').
 
 The summation Σ runs over all days d that fall within the season s.
 
-$P_daily(i, d)$ is the daily precipitation for flowline i on day d.
+$P_{daily(i, d)}$ is the daily precipitation for flowline i on day d.
 
 $$
 Unnormalized_{W_{i,s}} = \frac{A_i* Y_i * P_{seasonal_{i, s}}}{K_i}
@@ -193,7 +193,7 @@ P_{(i,d)} if P_{(i,d)} > 0
 $$
 
 $$
-PRECIP_FLOOR if P_{(i,d)} = 0
+PRECIP_{FLOOR} if P_{(i,d)} = 0
 $$
 
 ## **Results:**
@@ -221,16 +221,16 @@ Two forms of evaluation are used, visual animations of the basin, and a spot che
 # Animations over 2023
 
 ## Model 1
-![](images/tt_A_RC_L1.gif)
+![](images/A_RC_L1.gif)
 
 ## Model 2
-![](images/tt_P_A_RC_L1_TT.gif)
+![](images/A_RC_L1_P_TT.gif)
 
 ## Model 3
-![](images/tt_K_P_A_RC_L1_TT.gif)
+![](images/A_RC_L1_P_K_TT.gif)
 
 ## Model 4
-![](images/real_time_K_P_A_RC_L1_TT.gif)
+![](images/real_time_A_RC_L1_P_K_TT.gif)
 
 ## Model 5
 

@@ -1,0 +1,19 @@
+# environment.yml
+name: dis-disagg-env
+
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  - python=3.12.10
+  - geopandas   
+  - rasterio    
+  - rasterstats 
+  - shapely     
+  - pandas      
+  - numpy       
+  - pyarrow     
+  - matplotlib  
+  - seaborn     
+  - hydrostats  
